@@ -1,0 +1,10 @@
+.toggle-container {
+    margin-bottom: 1em;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: 1em;
+}
+
+.toggle-container__toggled {
+    margin-top: 1em;
+}

@@ -1,0 +1,12 @@
+.random-planet-container {
+    margin-top: 1em;
+    margin-bottom: 1em !important;
+}
+
+.planet-name {
+    font-size: 2em;
+}
+
+.term {
+    margin-right: .5rem;
+}
