@@ -6,8 +6,12 @@ import ErrorButton from '../error-button';
 import ErrorIndicator from '../error-indicator';
 import PeoplePage from '../people-page';
 import StarshipPage from '../starship-page';
+import { SwapiServiceProvider } from '../swapi-service-context';
+import SwapiService from '../../services/swapi-service';
 
 class App extends Component {
+
+  swapiService = new SwapiService();
 
   state = {
     randomPlanetToggled: true,
@@ -21,7 +25,6 @@ class App extends Component {
   }
 
   componentDidCatch() {
-    console.log('didCathc');
     this.setState({
       hasError: true
     })
@@ -36,17 +39,20 @@ class App extends Component {
     const randomPlanet = randomPlanetToggled ? <RandomPlanet /> : null;
 
     return (
-      <div>
-        <Header />
-        <div className="container">
-          {randomPlanet}
-          <div className={`toggle-container ${(!randomPlanetToggled) ? 'toggle-container__toggled' : ''}`}>
-            <button type="button" className="btn btn-warning" onClick={this.planetToggle}>Planet toggle</button>
-            <ErrorButton />
+      <SwapiServiceProvider value={this.swapiService}>
+        <div>
+          <Header />
+          <div className="container">
+            {randomPlanet}
+            <div className={`toggle-container ${(!randomPlanetToggled) ? 'toggle-container__toggled' : ''}`}>
+              <button type="button" className="btn btn-warning" onClick={this.planetToggle}>Planet toggle</button>
+              <ErrorButton />
+            </div>
+            <PeoplePage />
+            <StarshipPage />
           </div>
-          <PeoplePage />
         </div>
-      </div>
+      </SwapiServiceProvider>
     )
   }
 }
