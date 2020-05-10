@@ -8,15 +8,22 @@ import PeoplePage from '../people-page';
 import StarshipPage from '../starship-page';
 import { SwapiServiceProvider } from '../swapi-service-context';
 import SwapiService from '../../services/swapi-service';
+import SwapiServiceDump from '../../services/swapi-service-dumb';
 import PlanetPage from '../planet-page';
 
-class App extends Component {
-
-  swapiService = new SwapiService();
+class App extends Component {  
 
   state = {
     randomPlanetToggled: true,
-    hasError: false
+    hasError: false,
+    swapiService: new SwapiService()
+  }
+
+  onServiceChange = (e) => {
+    this.setState(({swapiService}) => {
+      const Service = swapiService instanceof SwapiService ? SwapiServiceDump : SwapiService;
+      return { swapiService: new Service };
+    });
   }
 
   planetToggle = () => {
@@ -40,9 +47,9 @@ class App extends Component {
     const randomPlanet = randomPlanetToggled ? <RandomPlanet /> : null;
 
     return (
-      <SwapiServiceProvider value={this.swapiService}>
+      <SwapiServiceProvider value={this.state.swapiService}>
         <div>
-          <Header />
+          <Header onServiceChange={this.onServiceChange}/>
           <div className="container">
             {randomPlanet}
             <div className={`toggle-container ${(!randomPlanetToggled) ? 'toggle-container__toggled' : ''}`}>
