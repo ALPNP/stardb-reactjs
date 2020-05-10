@@ -8,6 +8,7 @@ import PeoplePage from '../people-page';
 import StarshipPage from '../starship-page';
 import { SwapiServiceProvider } from '../swapi-service-context';
 import SwapiService from '../../services/swapi-service';
+import PlanetPage from '../planet-page';
 
 class App extends Component {
 
@@ -50,6 +51,7 @@ class App extends Component {
             </div>
             <PeoplePage />
             <StarshipPage />
+            <PlanetPage />
           </div>
         </div>
       </SwapiServiceProvider>
