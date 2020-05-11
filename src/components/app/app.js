@@ -22,7 +22,7 @@ class App extends Component {
   onServiceChange = (e) => {
     this.setState(({swapiService}) => {
       const Service = swapiService instanceof SwapiService ? SwapiServiceDump : SwapiService;
-      return { swapiService: new Service };
+      return { swapiService: new Service() };
     });
   }
 
@@ -44,7 +44,7 @@ class App extends Component {
     }
 
     const { randomPlanetToggled } = this.state;
-    const randomPlanet = randomPlanetToggled ? <RandomPlanet /> : null;
+    const randomPlanet = randomPlanetToggled ? <RandomPlanet updateInterval={50000} /> : null;
 
     return (
       <SwapiServiceProvider value={this.state.swapiService}>
