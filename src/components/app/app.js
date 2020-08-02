@@ -10,13 +10,25 @@ import { SwapiServiceProvider } from '../swapi-service-context';
 import SwapiService from '../../services/swapi-service';
 import SwapiServiceDump from '../../services/swapi-service-dumb';
 import PlanetPage from '../planet-page';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import ErrorBoundry from '../error-boundry';
+import { StarshipDetails } from '../sw-components';
+import SecretPage from './../pages/secret-page';
+import LoginPage from './../pages/login-page';
 
 class App extends Component {  
 
   state = {
     randomPlanetToggled: true,
     hasError: false,
-    swapiService: new SwapiService()
+    swapiService: new SwapiService(),
+    isLoggedIn: false
+  }
+
+  onLogin = () => {
+    this.setState(() => {
+      return { isLoggedIn: !this.state.isLoggedIn }
+    });
   }
 
   onServiceChange = (e) => {
@@ -48,19 +60,29 @@ class App extends Component {
 
     return (
       <SwapiServiceProvider value={this.state.swapiService}>
-        <div>
-          <Header onServiceChange={this.onServiceChange}/>
-          <div className="container">
-            {randomPlanet}
-            <div className={`toggle-container ${(!randomPlanetToggled) ? 'toggle-container__toggled' : ''}`}>
-              <button type="button" className="btn btn-warning" onClick={this.planetToggle}>Planet toggle</button>
-              <ErrorButton />
+        <Router>
+          <div>
+            <Header onServiceChange={this.onServiceChange} />
+            <div className="container">
+              {randomPlanet}
+              <div className={`toggle-container ${(!randomPlanetToggled) ? 'toggle-container__toggled' : ''}`}>
+                <button type="button" className="btn btn-warning" onClick={this.planetToggle}>Planet toggle</button>
+                <ErrorButton />
+              </div>
+
+              <Route className="btn btn-link" path="/" render={() => <h2>Welcome to star DB</h2>} exact />
+              <Route path='/peoples/:id?' component={PeoplePage} />
+              <Route path='/planets' component={PlanetPage}/>
+              <Route path='/starships' exact component={StarshipPage}/>
+              <Route path='/starships/:id' render={({ match }) => {
+                return (<ErrorBoundry><StarshipDetails itemId={match.params.id} /></ErrorBoundry>)
+              }} />
+
+              <Route path='/login' render={() => <LoginPage isLoggedIn={this.state.isLoggedIn} onLogin={this.onLogin} />} />
+              <Route path='/secret' render={() => <SecretPage isLoggedIn={this.state.isLoggedIn}/>} />
             </div>
-            <PeoplePage />
-            <StarshipPage />
-            <PlanetPage />
           </div>
-        </div>
+        </Router>
       </SwapiServiceProvider>
     )
   }
